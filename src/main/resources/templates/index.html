@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LaborFuture - Futuro do Trabalho 2050</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root { --bg:#020817; --card:#0f172a; --accent:#22c55e; --text:#e5e7eb; --muted:#9ca3af; --radius:18px; }
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background: radial-gradient(circle at top, #111827, #020817);
+  color: var(--text);
+  padding: 24px 16px 32px; /* ou 40px na home, se você já estiver usando */
+  min-height: 100vh;
+}
+
+        .container{max-width:1120px;margin:0 auto}
+        .top-nav{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+        .logo{font-weight:600;font-size:16px;color:var(--accent)}
+        .links{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11px}
+        .links a{color:var(--muted);text-decoration:none;padding:4px 8px;border-radius:999px;border:1px solid transparent}
+        .links a:hover{border-color:rgba(148,163,253,.25);color:var(--text)}
+        .links .btn{background:var(--accent);color:#020817;font-weight:600;border-color:transparent}
+        .user-label{font-size:11px;color:var(--accent)}
+        header{margin-bottom:24px}
+        .badge{display:inline-block;padding:6px 14px;border-radius:999px;border:1px solid var(--accent);font-size:12px;color:var(--accent);margin-bottom:10px}
+        h1{font-size:clamp(26px,4vw,40px);font-weight:600;line-height:1.3;margin-bottom:12px}
+        p.lead{font-size:15px;color:var(--muted);max-width:780px}
+        section{margin-top:28px}
+        h2{font-size:20px;margin-bottom:8px;font-weight:600}
+        p{font-size:14px;line-height:1.6;color:var(--muted)}
+        .grid{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+        .card{background:var(--card);border-radius:var(--radius);padding:14px;border:1px solid rgba(148,163,253,.08);box-shadow:0 10px 30px rgba(0,0,0,.45)}
+        .card h3{font-size:15px;margin-bottom:6px;color:var(--accent)}
+        .card ul{list-style:none;margin-top:4px}
+        .card li{font-size:13px;margin-bottom:3px;color:var(--muted)}
+        .meter{display:flex;align-items:center;gap:10px}
+        .meter input[type="range"]{width:100%}
+        .pill{display:inline-block;padding:4px 10px;border-radius:999px;border:1px solid rgba(148,163,253,.25);font-size:11px;color:var(--muted)}
+        .pill.good{border-color:#22c55e;color:#22c55e}
+        .pill.warn{border-color:#f59e0b;color:#f59e0b}
+        .pill.bad{border-color:#ef4444;color:#ef4444}
+        .accordion .item{border:1px solid rgba(148,163,253,.12);border-radius:12px;background:var(--card);margin-bottom:8px;overflow:hidden}
+        .accordion .head{padding:10px 12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+        .accordion .body{display:none;padding:0 12px 12px;color:var(--muted);font-size:13px}
+        .chipset{display:flex;flex-wrap:wrap;gap:8px}
+        .chip{padding:6px 10px;border-radius:999px;border:1px solid rgba(148,163,253,.25);font-size:12px;cursor:pointer}
+        .chip.active{background:var(--accent);border-color:var(--accent);color:#020817;font-weight:600}
+        .cta-profissoes{text-align:center;margin-top:28px}
+        .cta-profissoes a{display:inline-block;margin-top:10px;padding:8px 18px;border-radius:999px;background:var(--accent);color:#020817;font-size:12px;font-weight:600;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+        .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:14px}
+        .stat{background:var(--card);border:1px solid rgba(148,163,253,.08);border-radius:16px;padding:12px;text-align:center}
+        .stat .num{font-size:24px;font-weight:700}
+        .highlight{color:var(--accent);font-weight:500}
+        .reveal{opacity:0;transform:translateY(14px);transition:.45s ease}
+        .reveal.show{opacity:1;transform:none}
+        .footer{font-size:11px;color:var(--muted);text-align:center;margin-top:24px;}
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="top-nav">
+        <div class="logo">LaborFuture</div>
+        <div class="links">
+            <a th:href="@{/home}">Início</a>
+            <a th:href="@{/profissoes}">Profissões</a>
+            <a th:href="@{/habilidades}">Habilidades</a>
+            <a th:href="@{/impacto-ia}">Impacto da IA</a>
+            <a th:href="@{/trilhas}">Trilhas</a>
+            <a th:href="@{/sobre}">Sobre</a>
+            <a th:if="${nomeUsuario != null and #strings.equalsIgnoreCase(nomeUsuario, 'admin')}"
+               th:href="@{/admin/usuarios}">Admin</a>
+            <span th:if="${nomeUsuario != null}" class="user-label">
+        Olá, <span th:text="${nomeUsuario}"></span>
+      </span>
+            <a th:if="${nomeUsuario == null}" th:href="@{/cadastro}" class="btn">Entrar</a>
+            <a th:if="${nomeUsuario != null}" th:href="@{/logout}" class="btn">Sair</a>
+        </div>
+    </div>
+
+    <header class="reveal">
+        <div class="badge">Novas carreiras • Novas tecnologias • Infinitas possibilidades</div>
+        <h1>Como serão os empregos em 2050?</h1>
+        <p class="lead">
+      <span th:if="${nomeUsuario != null}">
+        Bem-vindo, <span class="highlight" th:text="${nomeUsuario}"></span>.
+      </span>
+            O trabalho está mudando. A automação e a IA eliminam tarefas repetitivas e criam novas oportunidades.
+            O desafio é equilibrar eficiência tecnológica com inclusão e valorização do trabalho humano — digital e braçal.
+        </p>
+    </header>
+
+    <section class="reveal">
+        <div class="stats">
+            <div class="stat">
+                <div class="num" data-target="2050">0</div>
+                <div class="muted">Horizonte do estudo</div>
+            </div>
+            <div class="stat">
+                <div class="num" data-target="8">0</div>
+                <div class="muted">Áreas em alta</div>
+            </div>
+            <div class="stat">
+                <div class="num" data-target="3">0</div>
+                <div class="muted">Frentes de requalificação</div>
+            </div>
+            <div class="stat">
+                <div class="num" data-target="100">0</div>
+                <div class="muted">% foco em habilidades humanas</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Onde estarão as maiores oportunidades?</h2>
+        <p>As maiores chances de crescimento estão em tecnologia, dados, sustentabilidade, saúde, educação contínua e trabalhos físicos qualificados.</p>
+        <div class="grid">
+            <div class="card">
+                <h3>Profissões em ascensão até 2050</h3>
+                <ul>
+                    <li th:each="job : ${futureGrowthJobs}" th:text="'• ' + ${job}"></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Por que essas funções crescem?</h3>
+                <p>Exigem pensamento crítico, criatividade, responsabilidade socioambiental e solução de problemas complexos — pontos em que a IA é complementar.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Habilidades humanas que valem ouro até 2050</h2>
+        <div class="grid">
+            <div class="card"><h3>Pensamento crítico</h3><p>Julgar evidências e decisões automatizadas.</p></div>
+            <div class="card"><h3>Aprendizado contínuo</h3><p>Capacidade de se requalificar rápido.</p></div>
+            <div class="card"><h3>Colaboração & Empatia</h3><p>Trabalho em equipe e foco no humano.</p></div>
+            <div class="card"><h3>Ética & Segurança</h3><p>Uso responsável de dados e IA.</p></div>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Onde a IA já está tirando (e ainda vai tirar) empregos?</h2>
+        <p>Impacto maior em trabalhos <strong>padronizados e repetitivos</strong>.</p>
+        <div class="grid">
+            <div class="card">
+                <h3>Funções mais ameaçadas</h3>
+                <ul>
+                    <li th:each="job : ${atRiskJobs}" th:text="'• ' + ${job}"></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Simulador de impacto</h3>
+                <p class="mb-2">Ajuste o nível de padronização vs contato humano:</p>
+                <div class="meter">
+                    <span class="pill">+ Humano</span>
+                    <input id="impactoRange" type="range" min="0" max="100" value="40" oninput="atualizaImpacto()">
+                    <span class="pill">+ Padronizado</span>
+                </div>
+                <p class="mt-2">Risco estimado: <span id="riscoTexto" class="pill good">baixo</span></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>O futuro também é braçal: tecnologia não levanta parede sozinha</h2>
+        <p>Trabalhos que exigem força física e técnica manual seguem essenciais.</p>
+        <div class="grid">
+            <div class="card">
+                <h3>Trabalhos físicos resilientes</h3>
+                <ul>
+                    <li th:each="job : ${resilientManualJobs}" th:text="'• ' + ${job}"></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>IA como aliada, não substituta</h3>
+                <p>Drones, sensores e robôs aumentam segurança e produtividade, mas a execução exige pessoas qualificadas.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Linha do tempo até 2050</h2>
+        <div class="accordion" id="timeline">
+            <div class="item">
+                <div class="head" onclick="toggleAcc(this)"><strong>2025–2030</strong><span>+</span></div>
+                <div class="body">Automação em massa de tarefas repetitivas e início forte da requalificação.</div>
+            </div>
+            <div class="item">
+                <div class="head" onclick="toggleAcc(this)"><strong>2030–2040</strong><span>+</span></div>
+                <div class="body">IA mais regulada, robôs colaborativos no campo e nas cidades.</div>
+            </div>
+            <div class="item">
+                <div class="head" onclick="toggleAcc(this)"><strong>2040–2050</strong><span>+</span></div>
+                <div class="body">Integração total entre IA, energias limpas e trabalho humano especializado.</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Quiz rápido: qual trilha combina com você?</h2>
+        <p>Selecione um interesse e veja uma sugestão:</p>
+        <div class="chipset" id="quizChips">
+            <div class="chip" data-key="dados">Gosto de dados e lógica</div>
+            <div class="chip" data-key="criacao">Curto criar produtos/experiências</div>
+            <div class="chip" data-key="seguranca">Me preocupo com segurança</div>
+            <div class="chip" data-key="campo">Prefiro trabalho em campo</div>
+            <div class="chip" data-key="ensinar">Gosto de ensinar</div>
+            <div class="chip" data-key="sustentavel">Sonho com energia limpa</div>
+        </div>
+        <div class="card mt-2" id="quizResultado" style="display:none">
+            <h3 id="quizTitulo"></h3>
+            <p id="quizTexto" class="mb-2"></p>
+            <a th:href="@{/profissoes}" class="btn btn-sm" style="background:var(--accent);border:none;color:#020817">
+                Explorar profissões
+            </a>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Dúvidas rápidas</h2>
+        <div class="accordion">
+            <div class="item">
+                <div class="head" onclick="toggleAcc(this)"><strong>A IA vai acabar com todos os empregos?</strong><span>+</span></div>
+                <div class="body">Não. Ela substitui tarefas e cria novas funções. O diferencial humano ganha valor.</div>
+            </div>
+            <div class="item">
+                <div class="head" onclick="toggleAcc(this)"><strong>Trabalho braçal tem futuro?</strong><span>+</span></div>
+                <div class="body">Sim. Construção, manutenção e infraestrutura são vitais e difíceis de automatizar totalmente.</div>
+            </div>
+            <div class="item">
+                <div class="head" onclick="toggleAcc(this)"><strong>Por onde começo a me requalificar?</strong><span>+</span></div>
+                <div class="body">Escolha uma trilha, estude fundamentos e construa projetos práticos.</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-profissoes reveal">
+        <h2>Quer conhecer mais sobre as profissões de maior oportunidade?</h2>
+        <p>Acesse a página dedicada e veja o que faz cada carreira em destaque.</p>
+        <a th:href="@{/profissoes}">Explorar profissões em destaque</a>
+    </section>
+
+    <footer class="footer">
+        LaborFuture — Futuro dos empregos, impacto da IA e valorização do trabalho humano, digital e braçal.
+    </footer>
+</div>
+
+<script>
+    const onScrollReveal = () => {
+      document.querySelectorAll('.reveal').forEach(el=>{
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 80) el.classList.add('show');
+      });
+    };
+    document.addEventListener('scroll', onScrollReveal);
+    window.addEventListener('load', onScrollReveal);
+
+    const animateCounters = () => {
+      document.querySelectorAll('.stat .num').forEach(el=>{
+        const target = +el.getAttribute('data-target');
+        let cur = 0;
+        const step = Math.max(1, Math.floor(target/60));
+        const tick = () => {
+          cur += step;
+          if (cur >= target) { el.textContent = target; }
+          else { el.textContent = cur; requestAnimationFrame(tick); }
+        };
+        tick();
+      });
+    };
+    window.addEventListener('load', animateCounters);
+
+    function atualizaImpacto(){
+      const v = +document.getElementById('impactoRange').value;
+      const tag = document.getElementById('riscoTexto');
+      if (v < 35){ tag.textContent = 'baixo'; tag.className='pill good'; }
+      else if (v < 70){ tag.textContent = 'moderado'; tag.className='pill warn'; }
+      else { tag.textContent = 'alto'; tag.className='pill bad'; }
+    }
+    atualizaImpacto();
+
+    function toggleAcc(head){
+      const body = head.nextElementSibling;
+      const open = body.style.display === 'block';
+      document.querySelectorAll('.accordion .body').forEach(b=>b.style.display='none');
+      document.querySelectorAll('.accordion .head span').forEach(s=>s.textContent='+');
+      if (!open){ body.style.display='block'; head.querySelector('span').textContent='–'; }
+    }
+
+    const mapas = {
+      dados:{t:'Trilha sugerida: Dados & IA',d:'Comece por lógica, SQL e fundamentos de IA/ML.'},
+      criacao:{t:'Trilha sugerida: Produto & Experiência',d:'Explore UX/UI, front-end e design de soluções.'},
+      seguranca:{t:'Trilha sugerida: Cibersegurança',d:'Estude redes, sistemas e fundamentos de segurança.'},
+      campo:{t:'Trilha sugerida: Campo & Manutenção',d:'Busque formações técnicas, mecatrônica, manutenção e energia.'},
+      ensinar:{t:'Trilha sugerida: Educação & Requalificação',d:'Combine domínio técnico com didática para formar novos profissionais.'},
+      sustentavel:{t:'Trilha sugerida: Energias Renováveis & ESG',d:'Aprofunde-se em energia limpa e impacto socioambiental.'}
+    };
+    document.querySelectorAll('#quizChips .chip').forEach(ch=>{
+      ch.addEventListener('click', ()=>{
+        document.querySelectorAll('#quizChips .chip').forEach(c=>c.classList.remove('active'));
+        ch.classList.add('active');
+        const key = ch.getAttribute('data-key');
+        const r = mapas[key];
+        document.getElementById('quizTitulo').textContent = r.t;
+        document.getElementById('quizTexto').textContent = r.d;
+        document.getElementById('quizResultado').style.display = 'block';
+        document.getElementById('quizResultado').scrollIntoView({behavior:'smooth', block:'center'});
+      });
+    });
+</script>
+</body>
+</html>

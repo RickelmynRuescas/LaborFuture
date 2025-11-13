@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LaborFuture - Trilhas de Requalificação</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root{--bg:#020817;--card:#0f172a;--accent:#22c55e;--text:#e5e7eb;--muted:#9ca3af;--radius:18px;}
+        *{box-sizing:border-box;margin:0;padding:0;}
+        body{
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background: radial-gradient(circle at top, #111827, #020817);
+  color: var(--text);
+  padding: 24px 16px 32px; /* ou 40px na home, se você já estiver usando */
+  min-height: 100vh;
+}
+
+        .container{max-width:1120px;margin:0 auto;}
+        .top-nav{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap;}
+        .logo{font-weight:600;font-size:16px;color:var(--accent);}
+        .links{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11px;}
+        .links a{color:var(--muted);text-decoration:none;padding:4px 8px;border-radius:999px;border:1px solid transparent;}
+        .links a:hover{border-color:rgba(148,163,253,.25);color:var(--text);}
+        .links .btn{background:var(--accent);color:#020817;font-weight:600;border-color:transparent;}
+        .user-label{font-size:11px;color:var(--accent);}
+        h1{font-size:24px;margin-bottom:6px;}
+        p{font-size:13px;color:var(--muted);}
+        .grid{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
+        .card{background:var(--card);border-radius:var(--radius);padding:12px;border:1px solid rgba(148,163,253,.1);box-shadow:0 8px 24px rgba(0,0,0,.5);cursor:pointer;transition:.15s;}
+        .card:hover{transform:translateY(-3px);border-color:var(--accent);}
+        .card h3{font-size:15px;color:var(--accent);margin-bottom:4px;}
+        .detalhe{margin-top:14px;background:var(--card);border-radius:var(--radius);padding:12px;border:1px solid rgba(148,163,253,.16);display:none;}
+        .detalhe h2{font-size:17px;margin-bottom:4px;}
+        ul{font-size:13px;color:var(--muted);}
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="top-nav">
+        <div class="logo">LaborFuture</div>
+        <div class="links">
+            <a th:href="@{/home}">Início</a>
+            <a th:href="@{/profissoes}">Profissões</a>
+            <a th:href="@{/habilidades}">Habilidades</a>
+            <a th:href="@{/impacto-ia}">Impacto da IA</a>
+            <a th:href="@{/trilhas}">Trilhas</a>
+            <a th:href="@{/sobre}">Sobre</a>
+            <a th:if="${nomeUsuario != null and #strings.equalsIgnoreCase(nomeUsuario, 'admin')}"
+               th:href="@{/admin/usuarios}">Admin</a>
+            <span th:if="${nomeUsuario != null}" class="user-label">
+        Olá, <span th:text="${nomeUsuario}"></span>
+      </span>
+            <a th:if="${nomeUsuario == null}" th:href="@{/cadastro}" class="btn">Entrar</a>
+            <a th:if="${nomeUsuario != null}" th:href="@{/logout}" class="btn">Sair</a>
+        </div>
+    </div>
+
+    <h1>Trilhas de requalificação</h1>
+    <p>Clique na situação que mais parece com a sua realidade e veja sugestões de caminho para 2050.</p>
+
+    <div class="grid">
+        <div class="card" data-id="construcao">
+            <h3>Trabalho na construção civil</h3>
+            <p>Quero continuar em campo, com mais qualificação e tecnologia.</p>
+        </div>
+        <div class="card" data-id="atendimento">
+            <h3>Trabalho com atendimento ou telemarketing</h3>
+            <p>Tenho medo de ser substituído por chatbot.</p>
+        </div>
+        <div class="card" data-id="adm">
+            <h3>Rotina administrativa repetitiva</h3>
+            <p>Lanço dados, planilhas ou documentos o dia todo.</p>
+        </div>
+        <div class="card" data-id="estudante">
+            <h3>Sou estudante</h3>
+            <p>Quero alinhar propósito, tecnologia e empregabilidade.</p>
+        </div>
+    </div>
+
+    <div id="trilhaDetalhe" class="detalhe">
+        <h2 id="trilhaTitulo"></h2>
+        <ul id="trilhaLista"></ul>
+        <p class="mt-2">Veja também as <a th:href="@{/profissoes}">profissões em destaque</a> relacionadas a essa trilha.</p>
+    </div>
+</div>
+
+<script>
+    const trilhas = {
+      construcao: [
+        "Investir em formação técnica (edificações, elétrica, mecânica).",
+        "Aprender leitura de projetos, normas de segurança e sustentabilidade.",
+        "Migrar para mestre de obras, instalador de painéis solares, técnico de manutenção.",
+        "Usar tecnologia (BIM, drones, sensores) como diferencial."
+      ],
+      atendimento: [
+        "Estudar relacionamento com cliente e vendas consultivas.",
+        "Dominar ferramentas de CRM e entender chatbots/IA.",
+        "Migrar para suporte especializado ou CX.",
+        "Focar em empatia, negociação e resolução de problemas complexos."
+      ],
+      adm: [
+        "Aprender Excel avançado, lógica e noções de banco de dados.",
+        "Conhecer automação (RPA) e noções de programação.",
+        "Migrar para analista de processos, dados ou backoffice inteligente.",
+        "Ser protagonista na implantação de automações."
+      ],
+      estudante: [
+        "Fortalecer lógica, escrita, inglês e noções de tecnologia.",
+        "Explorar áreas como dev, dados, robótica, saúde, ESG, UX.",
+        "Criar projetos simples e portfólio cedo.",
+        "Escolher trilha que una impacto real e interesse pessoal."
+      ]
+    };
+
+    document.querySelectorAll('.card[data-id]').forEach(card=>{
+      card.addEventListener('click', ()=>{
+        const id = card.getAttribute('data-id');
+        const lista = trilhas[id] || [];
+        document.getElementById('trilhaTitulo').textContent = card.querySelector('h3').textContent;
+        const ul = document.getElementById('trilhaLista');
+        ul.innerHTML = '';
+        lista.forEach(item=>{
+          const li = document.createElement('li');
+          li.textContent = item;
+          ul.appendChild(li);
+        });
+        document.getElementById('trilhaDetalhe').style.display = 'block';
+        document.getElementById('trilhaDetalhe').scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    });
+</script>
+</body>
+</html>

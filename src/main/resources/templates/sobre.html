@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LaborFuture - Sobre o Projeto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root{--bg:#020817;--card:#0f172a;--accent:#22c55e;--text:#e5e7eb;--muted:#9ca3af;--radius:18px;}
+        *{box-sizing:border-box;margin:0;padding:0;}
+        body{
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background: radial-gradient(circle at top, #111827, #020817);
+  color: var(--text);
+  padding: 24px 16px 32px; /* ou 40px na home, se você já estiver usando */
+  min-height: 100vh;
+}
+
+        .container{max-width:900px;margin:0 auto;}
+        .top-nav{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap;}
+        .logo{font-weight:600;font-size:16px;color:var(--accent);}
+        .links{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11px;}
+        .links a{color:var(--muted);text-decoration:none;padding:4px 8px;border-radius:999px;border:1px solid transparent;}
+        .links a:hover{border-color:rgba(148,163,253,.25);color:var(--text);}
+        .links .btn{background:var(--accent);color:#020817;font-weight:600;border-color:transparent;}
+        .user-label{font-size:11px;color:var(--accent);}
+        h1{font-size:24px;margin-bottom:6px;}
+        h2{font-size:16px;margin-top:14px;margin-bottom:4px;}
+        p,li{font-size:13px;color:var(--muted);}
+        .card{background:var(--card);border-radius:var(--radius);padding:12px;border:1px solid rgba(148,163,253,.12);box-shadow:0 8px 24px rgba(0,0,0,.5);margin-top:10px;}
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="top-nav">
+        <div class="logo">LaborFuture</div>
+        <div class="links">
+            <a th:href="@{/home}">Início</a>
+            <a th:href="@{/profissoes}">Profissões</a>
+            <a th:href="@{/habilidades}">Habilidades</a>
+            <a th:href="@{/impacto-ia}">Impacto da IA</a>
+            <a th:href="@{/trilhas}">Trilhas</a>
+            <a th:href="@{/sobre}">Sobre</a>
+            <a th:if="${nomeUsuario != null and #strings.equalsIgnoreCase(nomeUsuario, 'admin')}"
+               th:href="@{/admin/usuarios}">Admin</a>
+            <span th:if="${nomeUsuario != null}" class="user-label">
+        Olá, <span th:text="${nomeUsuario}"></span>
+      </span>
+            <a th:if="${nomeUsuario == null}" th:href="@{/cadastro}" class="btn">Entrar</a>
+            <a th:if="${nomeUsuario != null}" th:href="@{/logout}" class="btn">Sair</a>
+        </div>
+    </div>
+
+    <h1>Sobre o LaborFuture</h1>
+    <div class="card">
+        <h2>Objetivo</h2>
+        <p>
+            O LaborFuture é uma aplicação desenvolvida para a Global Solution da FIAP, com foco em analisar o futuro do trabalho até 2050,
+            considerando o avanço da Inteligência Artificial, novas tecnologias, sustentabilidade e a valorização do trabalho braçal qualificado.
+        </p>
+
+        <h2>Tecnologias utilizadas</h2>
+        <ul>
+            <li>API RESTful com <strong>Spring Boot</strong>;</li>
+            <li>Banco de dados <strong>Oracle (FIAP)</strong> com Spring Data JPA;</li>
+            <li>Front-end com <strong>Thymeleaf</strong>;</li>
+            <li>Estilização com <strong>Bootstrap</strong> + CSS custom;</li>
+            <li>Validações com <strong>DTOs (records)</strong> e Bean Validation.</li>
+        </ul>
+
+        <h2>Funcionalidades</h2>
+        <ul>
+            <li>Cadastro e login de usuários;</li>
+            <li>Página interativa sobre o futuro do trabalho;</li>
+            <li>Exploração de profissões em destaque e detalhes específicos;</li>
+            <li>Mapa de habilidades essenciais;</li>
+            <li>Análise do impacto da IA e empregos resilientes;</li>
+            <li>Trilhas de requalificação para diferentes perfis;</li>
+            <li>Área administrativa simples para gestão de usuários (apenas admin).</li>
+        </ul>
+
+        <h2>Alinhamento com o tema</h2>
+        <p>
+            A aplicação mostra que a IA não extingue todo o trabalho, mas transforma funções,
+            exige requalificação contínua e reforça a importância de quem constrói, mantém
+            e opera o mundo físico. O LaborFuture orienta essa transição.
+        </p>
+
+        <h2>Equipe</h2>
+        <p>Rickelmyn de Souza Ruescas - 556055
+            Fabrini Soares - 557813
+            Vitor Couto Victorino - 554965</p>
+    </div>
+</div>
+</body>
+</html>
