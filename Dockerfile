@@ -15,4 +15,4 @@ RUN ./mvnw -DoutputFile=target/mvn-dependency-list.log -B -DskipTests clean depe
 # EXPOSE 8080
 
 # Comando para executar a aplicação
-CMD ["java", "-jar", "target/Labor-Future-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/Labor-future-0.0.1-SNAPSHOT.jar"]
