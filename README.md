@@ -2,6 +2,16 @@
 
 Este projeto é uma **Plataforma de Orientação Profissional** que utiliza análise de tendências para guiar usuários na transição para o mercado de trabalho até 2050, focando em **Profissões de Oportunidade** e **Habilidades Chave**.
 
+## 👥 Participantes do Grupo
+
+| Nome | RM |
+| :--- | :--- |
+| Rickelmyn de Souza Ruescas | 556055 |
+| Vitor Couto Victorino | 554965 |
+| Fabrini Soares | 557813 |
+
+---
+
 ## 💡 Stack Tecnológico e Arquitetura
 
 O projeto foi desenvolvido seguindo o padrão de **Arquitetura em Camadas (MVC)** do Spring Boot para garantir robustez e escalabilidade.
