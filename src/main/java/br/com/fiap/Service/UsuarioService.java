@@ -29,12 +29,20 @@ public class UsuarioService {
         return repository.findByNome(nome);
     }
 
-        public Optional<Usuario> autenticar(String nome, String senha) {
+    public Optional<Usuario> autenticar(String nome, String senha) {
         return repository.findByNomeAndSenha(nome, senha);
     }
 
     public Usuario criar(UsuarioDTO dto) {
-        Usuario usuario = new Usuario(null, dto.nome(), dto.senha());
+        // Cria o usuário incluindo as respostas das perguntas de segurança
+        Usuario usuario = new Usuario(
+                null,
+                dto.nome(),
+                dto.senha(),
+                dto.primeiroAnimal(),
+                dto.cidadeNascimento(),
+                dto.apelidoInfancia()
+        );
         return repository.save(usuario);
     }
 
@@ -42,6 +50,9 @@ public class UsuarioService {
         return repository.findById(id).map(existente -> {
             existente.setNome(dto.nome());
             existente.setSenha(dto.senha());
+            existente.setPrimeiroAnimal(dto.primeiroAnimal());
+            existente.setCidadeNascimento(dto.cidadeNascimento());
+            existente.setApelidoInfancia(dto.apelidoInfancia());
             return repository.save(existente);
         });
     }
